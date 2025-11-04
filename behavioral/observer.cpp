@@ -26,7 +26,7 @@ class Observer : public IObserver
 public:
    Observer(const std::string& name) : name_(name) {};
 
-   void update(const std::string& msg) {
+   void update(const std::string& msg) override {
       std::cout<<name_<<" got: \""<<msg<<"\" from subject!\n";
    }
 private:
@@ -41,7 +41,7 @@ class Subject : public ISubject
 public:
    Subject() = default;
    
-   void attach(const std::weak_ptr<IObserver>& observer) {
+   void attach(const std::weak_ptr<IObserver>& observer) override {
       for(auto it = observers_.begin(); it != observers_.end();)
       {
          if(auto strong = it->lock())
@@ -60,7 +60,7 @@ public:
       observers_.push_back(observer);
    }
 
-   void detach(const std::weak_ptr<IObserver>& observer) {
+   void detach(const std::weak_ptr<IObserver>& observer) override {
       for(auto it = observers_.begin(); it != observers_.end();)
       {
          if(auto strong = it->lock())
@@ -81,7 +81,7 @@ public:
       }
    }
 
-   void notify(const std::string& msg) {
+   void notify(const std::string& msg) override {
       for(auto it = observers_.begin(); it != observers_.end();)
       {
          if(auto ob = it->lock())
